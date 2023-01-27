@@ -1,0 +1,25 @@
+// Signature format: 4.0
+package soup.compose.photo {
+
+  @kotlin.RequiresOptIn(message="Photo is experimental. The API may be changed in the future.") @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention) public @interface ExperimentalPhotoApi {
+  }
+
+  public final class PhotoBoxKt {
+    method @androidx.compose.runtime.Composable @soup.compose.photo.ExperimentalPhotoApi public static void PhotoBox(optional androidx.compose.ui.Modifier modifier, optional soup.compose.photo.PhotoState state, optional boolean enabled, kotlin.jvm.functions.Function1<? super androidx.compose.foundation.layout.BoxScope,kotlin.Unit> content);
+  }
+
+  @androidx.compose.runtime.Stable @soup.compose.photo.ExperimentalPhotoApi public final class PhotoState {
+    ctor public PhotoState(optional @FloatRange(from=1.0) float currentScale, optional long currentOffset, optional float minimumScale, optional float maximumScale);
+    method public suspend Object? animateScale(@FloatRange(from=1.0) float scale, kotlin.coroutines.Continuation<? super kotlin.Unit> p);
+    method public suspend Object? animateToInitialState(kotlin.coroutines.Continuation<? super kotlin.Unit> p);
+    method public boolean isScaled();
+    method public void setPhotoIntrinsicSize(long size);
+    property public final boolean isScaled;
+  }
+
+  public final class PhotoStateKt {
+    method @androidx.compose.runtime.Composable @soup.compose.photo.ExperimentalPhotoApi public static soup.compose.photo.PhotoState rememberPhotoState(optional @FloatRange(from=1.0) float initialScale, optional long initialOffset, optional float minimumScale, optional float maximumScale);
+  }
+
+}
+

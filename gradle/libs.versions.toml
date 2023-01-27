@@ -2,8 +2,7 @@
 android-gradle = "7.3.1"
 
 kotlin = "1.7.20"
-coroutines = "1.6.2"
-dokka = "1.7.10"
+dokka = "1.7.20"
 
 composeBom = "2023.01.00"
 composeCompiler = "1.3.2"
@@ -21,9 +20,15 @@ spotless = "5.12.4"
 metalava = "0.1.9"
 
 [libraries]
+
+android-pluginGradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
+mavenPublish-pluginGradle = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.17.0" }
+metalava-pluginGradle = { module = "me.tylerbwong.gradle:metalava-gradle", version = "0.2.0" }
+
+kotlin-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
-kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+dokka-pluginGradle = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-animation = { module = "androidx.compose.animation:animation" }
@@ -50,9 +55,5 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "android-gradle" }
-android-library = { id = "com.android.library", version.ref = "android-gradle" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 metalava = { id = "me.tylerbwong.gradle.metalava", version.ref = "metalava" }

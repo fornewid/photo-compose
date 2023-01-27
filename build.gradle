@@ -1,5 +1,127 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath libs.android.pluginGradle
+        classpath libs.kotlin.pluginGradle
+        classpath libs.mavenPublish.pluginGradle
+        classpath libs.metalava.pluginGradle
+        classpath libs.dokka.pluginGradle
+    }
+}
+
 plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.spotless)
+}
+
+apply plugin: 'org.jetbrains.dokka'
+
+tasks.withType(org.jetbrains.dokka.gradle.DokkaMultiModuleTask).configureEach {
+    outputDirectory = rootProject.file('docs/api')
+    failOnWarning = true
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    plugins.withId("com.vanniktech.maven.publish") {
+        mavenPublish {
+            sonatypeHost = "S01"
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'com.diffplug.spotless'
+    spotless {
+        kotlin {
+            target '**/*.kt'
+            targetExclude("$buildDir/**/*.kt")
+            targetExclude('bin/**/*.kt')
+
+            ktlint("0.42.1")
+            licenseHeaderFile rootProject.file('spotless/copyright.kt')
+        }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { compile ->
+        kotlinOptions {
+            // Set JVM target to 1.8
+            jvmTarget = "1.8"
+            // Allow use of @OptIn
+            freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+        }
+    }
+
+    // Read in the signing.properties file if it is exists
+    def signingPropsFile = rootProject.file('release/signing.properties')
+    if (signingPropsFile.exists()) {
+        def localProperties = new Properties()
+        signingPropsFile.withInputStream { is -> localProperties.load(is) }
+        localProperties.each { prop ->
+            if (prop.key == "signing.secretKeyRingFile") {
+                // If this is the key ring, treat it as a relative path
+                project.ext.set(prop.key, rootProject.file(prop.value).absolutePath)
+            } else {
+                project.ext.set(prop.key, prop.value)
+            }
+        }
+    }
+
+    // If we have a POM Artifact ID, we should generate API files
+    if (project.hasProperty('POM_ARTIFACT_ID')) {
+        apply plugin: 'me.tylerbwong.gradle.metalava'
+
+        metalava {
+            filename = "api/current.api"
+            reportLintsAsErrors = true
+        }
+    }
+
+    // Must be afterEvaluate or else com.vanniktech.maven.publish will overwrite our
+    // dokka and version configuration.
+    afterEvaluate {
+        if (tasks.findByName('dokkaHtmlPartial') == null) {
+            // If dokka isn't enabled on this module, skip
+            return
+        }
+
+        tasks.named('dokkaHtmlPartial') {
+            dokkaSourceSets.configureEach {
+                reportUndocumented.set(true)
+                skipEmptyPackages.set(true)
+                skipDeprecated.set(true)
+                jdkVersion.set(8)
+
+                // Add Android SDK packages
+                noAndroidSdkLink.set(false)
+
+                // Add samples from :sample module
+                samples.from(rootProject.file("app/src/main/java/"))
+
+                // AndroidX + Compose docs
+                externalDocumentationLink {
+                    url.set(new URL("https://developer.android.com/reference/"))
+                    packageListUrl.set(new URL("https://developer.android.com/reference/androidx/package-list"))
+                }
+                externalDocumentationLink {
+                    url.set(new URL("https://developer.android.com/reference/kotlin/"))
+                    packageListUrl.set(new URL("https://developer.android.com/reference/kotlin/androidx/package-list"))
+                }
+
+                sourceLink {
+                    localDirectory.set(project.file("src/main/java"))
+                    // URL showing where the source code can be accessed through the web browser
+                    remoteUrl.set(new URL("https://github.com/fornewid/naver-map-compose/blob/main/${project.name}/src/main/java"))
+                    // Suffix which is used to append the line number to the URL. Use #L for GitHub
+                    remoteLineSuffix.set("#L")
+                }
+            }
+        }
+    }
 }

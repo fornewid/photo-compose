@@ -1,11 +1,35 @@
+/*
+ * Copyright 2023 SOUP
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package soup.compose.photo
 
 import androidx.annotation.FloatRange
-import androidx.compose.animation.core.*
-import androidx.compose.runtime.*
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateDecay
+import androidx.compose.animation.core.animateTo
+import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.isSpecified
@@ -24,7 +48,7 @@ import androidx.compose.ui.layout.times
  */
 @ExperimentalPhotoApi
 @Composable
-fun rememberPhotoState(
+public fun rememberPhotoState(
     @FloatRange(from = 1.0) initialScale: Float = 1f,
     initialOffset: Offset = Offset.Zero,
     minimumScale: Float = 1f,
@@ -48,7 +72,7 @@ fun rememberPhotoState(
  */
 @ExperimentalPhotoApi
 @Stable
-class PhotoState(
+public class PhotoState(
     @FloatRange(from = 1.0) currentScale: Float = 1f,
     currentOffset: Offset = Offset.Zero,
     private val minimumScale: Float = 1f,
@@ -63,7 +87,7 @@ class PhotoState(
      * Set the intrinsic size of the photo.
      * If the value is set to [Size.Unspecified], it is assumed to be layout size.
      */
-    fun setPhotoIntrinsicSize(size: Size) {
+    public fun setPhotoIntrinsicSize(size: Size) {
         photoIntrinsicSize = size
     }
 
@@ -107,13 +131,13 @@ class PhotoState(
         )
     }
 
-    val isScaled: Boolean
+    public val isScaled: Boolean
         get() = currentScale != 1f || currentOffset != Offset.Zero
 
     /**
      * Animate to the initial state.
      */
-    suspend fun animateToInitialState() {
+    public suspend fun animateToInitialState() {
         val initialScale = currentScale
         val targetScale = minimumScale
         val initialOffset = currentOffset
@@ -134,7 +158,7 @@ class PhotoState(
      *
      * @param scale the scale to animate to. Must be between 1f and [maximumScale] (inclusive).
      */
-    suspend fun animateScale(
+    public suspend fun animateScale(
         @FloatRange(from = 1.0) scale: Float,
     ) {
         val initialScale = currentScale
@@ -171,7 +195,7 @@ class PhotoState(
         return offset.x !in -scrollableX..scrollableX && offset.y !in (-scrollableY..scrollableY)
     }
 
-    companion object {
+    internal companion object {
         /**
          * The default [Saver] implementation for [PhotoState].
          */
