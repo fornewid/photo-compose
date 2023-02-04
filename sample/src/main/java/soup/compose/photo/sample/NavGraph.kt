@@ -36,6 +36,13 @@ data class Destination(
                 }
             ),
             Destination(
+                key = "PhotoBox in Column",
+                description = "PhotoBoxInColumnDemo",
+                content = {
+                    PhotoBoxInColumnDemo()
+                }
+            ),
+            Destination(
                 key = "PhotoBox in Pager",
                 description = "PhotoBoxInPagerDemo",
                 content = {
