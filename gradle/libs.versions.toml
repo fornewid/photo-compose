@@ -15,15 +15,18 @@ coil = "2.1.0"
 
 junit = "4.13.2"
 androidxtest = "1.4.0"
+androidxtest-ext-junit = "1.1.5"
+espresso = "3.5.1"
 
+maven-publish = "0.17.0"
 spotless = "5.12.4"
-metalava = "0.1.9"
+metalava = "0.2.0"
 
 [libraries]
 
 android-pluginGradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
-mavenPublish-pluginGradle = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.17.0" }
-metalava-pluginGradle = { module = "me.tylerbwong.gradle:metalava-gradle", version = "0.2.0" }
+mavenPublish-pluginGradle = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "maven-publish" }
+metalava-pluginGradle = { module = "me.tylerbwong.gradle:metalava-gradle", version.ref = "metalava" }
 
 kotlin-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -53,7 +56,8 @@ junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidxtest" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxtest" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxtest" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxtest-ext-junit" }
+androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-metalava = { id = "me.tylerbwong.gradle.metalava", version.ref = "metalava" }
