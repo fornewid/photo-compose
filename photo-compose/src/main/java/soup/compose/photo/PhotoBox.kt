@@ -42,6 +42,8 @@ public fun PhotoBox(
     modifier: Modifier = Modifier,
     state: PhotoState = rememberPhotoState(),
     enabled: Boolean = true,
+    contentAlignment: Alignment = Alignment.Center,
+    propagateMinConstraints: Boolean = false,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -87,8 +89,8 @@ public fun PhotoBox(
                 translationY = state.currentOffset.y
             }
             .transformable(state = transformableState),
-        contentAlignment = Alignment.Center,
-        propagateMinConstraints = false,
+        contentAlignment = contentAlignment,
+        propagateMinConstraints = propagateMinConstraints,
         content = content,
     )
 }

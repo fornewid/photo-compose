@@ -5,7 +5,7 @@ package soup.compose.photo {
   }
 
   public final class PhotoBoxKt {
-    method @androidx.compose.runtime.Composable @soup.compose.photo.ExperimentalPhotoApi public static void PhotoBox(optional androidx.compose.ui.Modifier modifier, optional soup.compose.photo.PhotoState state, optional boolean enabled, kotlin.jvm.functions.Function1<? super androidx.compose.foundation.layout.BoxScope,kotlin.Unit> content);
+    method @androidx.compose.runtime.Composable @soup.compose.photo.ExperimentalPhotoApi public static void PhotoBox(optional androidx.compose.ui.Modifier modifier, optional soup.compose.photo.PhotoState state, optional boolean enabled, optional androidx.compose.ui.Alignment contentAlignment, optional boolean propagateMinConstraints, kotlin.jvm.functions.Function1<? super androidx.compose.foundation.layout.BoxScope,kotlin.Unit> content);
   }
 
   @androidx.compose.runtime.Stable @soup.compose.photo.ExperimentalPhotoApi public final class PhotoState {
