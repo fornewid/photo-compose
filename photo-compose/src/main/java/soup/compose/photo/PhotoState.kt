@@ -132,7 +132,9 @@ public class PhotoState(
     }
 
     public val isScaled: Boolean
-        get() = currentScale != 1f || currentOffset != Offset.Zero
+        get() = currentScale != 1f || currentOffset.isZero.not()
+
+    private val Offset.isZero: Boolean get() = x == 0F && y == 0F
 
     /**
      * Animate to the initial state.
